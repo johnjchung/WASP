@@ -1,0 +1,1 @@
+Fatal error: exception Symbol_table.DuplicateObjFuncError("YOU CANNOT DECLARE TWO OBJECTS, ENDPOINTS, OR FUNCS IN THE SAME PROGRAM WITH THE SAME NAME: o1")

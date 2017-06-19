@@ -1,0 +1,5 @@
+list<string> some_strings = ["string1", "string2", "string3", "string4"];
+
+Endpoint listChecking(GET:) {
+	string b = some_strings@2;
+}

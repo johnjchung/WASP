@@ -1,0 +1,12 @@
+Endpoint testBinops(GET:) {
+	int a = 7 mod 4 * 3;
+	int b = 5 mod 5 + 1;
+
+	bool c = 2.3 < 1 and 4 > 3;
+	bool d = 2.3 > 1 and 2 < 1;
+
+	bool e = true and true and true;
+	bool f = true or false and false;
+
+	bool g = not true or true;
+}

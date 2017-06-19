@@ -1,0 +1,3 @@
+Endpoint int_plus_float(GET:) {
+	float x = 3.3 + 4;
+}

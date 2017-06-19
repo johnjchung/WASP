@@ -1,0 +1,1 @@
+Endpoint float_assignment( GET:) {float x = [float] 3.;, float y = [float] 2.3;}

@@ -1,0 +1,37 @@
+Func string reverseString(string a) {
+    int i = sizeof a - 1;
+    string reverseString = "";
+    while (i >= 0) {
+        reverseString = reverseString ^ a @ i->(i+1);
+        i = i - 1;
+    }
+    return reverseString;
+}
+
+Func string funkyCaps(string a) {
+    int i = 0;
+    string funkyString = "";
+    while (i < sizeof a) {
+        if (i mod 2 == 0) {
+            funkyString = funkyString ^ cap (a @ i->(i+1));
+        } else {
+            funkyString = funkyString ^ low (a @ i->(i+1));
+        }
+        i = i + 1;
+    }
+    return funkyString;
+}
+
+Endpoint reverse(GET:string s) {
+    string sublist = reverseString(s);
+}
+
+Endpoint funky(GET:string s) {
+    string funkyCapsString = funkyCaps(s);
+}
+
+Endpoint aggregator(GET:string s) {
+    string reverse = reverseString(s);
+    reverse reversetype = reverse{s};
+    string funkyCapsString = funkyCaps(s);
+}

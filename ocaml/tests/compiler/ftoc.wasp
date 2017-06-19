@@ -1,0 +1,8 @@
+Func float ffftoccc(float f) {
+    float cels = (f .- 32) .* (5 ./ 9);
+    return cels;
+}
+
+Endpoint ftoc(GET:float f) {
+    float celsius = ffftoccc(f);
+}

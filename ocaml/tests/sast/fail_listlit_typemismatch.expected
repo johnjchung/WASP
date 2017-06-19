@@ -1,0 +1,1 @@
+Fatal error: exception Type_checking.ListLitTypeError("A LIST LITERAL CANNOT BE DECLARED WITH EXPRESSIONS OF MIXED TYPES: string AND int")

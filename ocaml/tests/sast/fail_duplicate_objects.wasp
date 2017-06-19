@@ -1,0 +1,7 @@
+Object o1() {
+	float x;
+}
+
+Object o1() {
+	string y;
+}

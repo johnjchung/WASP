@@ -1,0 +1,8 @@
+Endpoint comments(GET:) {
+	/*bool a = true and true;*/
+	int x = 4;
+	float y = 3.5;
+	/*y = y + x;
+	int a = 99;
+	*/
+}

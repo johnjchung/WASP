@@ -1,0 +1,60 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"math"
+	"os"
+	"strconv"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+type squarefloat_struct struct {
+	Square int `db:"square" json:"square"`
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/squarefloat/:i", Get_squarefloat)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func squareFloat(i int) int {
+	a := []int {1, 2, 3, 4, 5}
+	i = a[3]
+	return i
+}
+
+func squarefloat_struct_wrapper(i int) squarefloat_struct {
+	return squarefloat_struct{Square: squareFloat(i)}
+}
+
+func Get_squarefloat(c *gin.Context) {
+	i, err := strconv.Atoi(c.Param("i"))
+	if	err != nil { c.String(400, "Error: I must be an integer."); return }
+	squarefloat_struct := squarefloat_struct_wrapper(i)
+	c.JSON(200, squarefloat_struct)
+}

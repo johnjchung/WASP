@@ -1,0 +1,1 @@
+Fatal error: exception Type_checking.VariableDeclarationTypeError("Expected int expression, found float")

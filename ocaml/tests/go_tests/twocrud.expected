@@ -1,0 +1,293 @@
+package main
+
+import (
+	"database/sql"
+	"github.com/gin-gonic/gin"
+	_ "github.com/go-sql-driver/mysql"
+	"gopkg.in/gorp.v1"
+	"log"
+	"math"
+	"os"
+	"strconv"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+type gettest_struct struct {
+	Id int64 `db:"id" json:"id"`
+	Greeting string `db:"greeting" json:"greeting"`
+	Holiday string `db:"holiday" json:"holiday"`
+}
+
+type crudtest_struct struct {
+	Id int64 `db:"id" json:"id"`
+	Firstname string `db:"firstname" json:"firstname"`
+	Lastname string `db:"lastname" json:"lastname"`
+}
+
+var dbmap = initDb()
+
+func initDb() *gorp.DbMap {
+	db, err := sql.Open("mysql", "root:root@tcp(localhost:8889)/wasp")
+	checkErr(err, "sql.Open failed")
+	dbmap := &gorp.DbMap{Db: db, Dialect:gorp.MySQLDialect{"InnoDB", "UTF8"}}
+	dbmap.AddTableWithName(gettest_struct{}, "gettest_struct").SetKeys(true, "Id")
+	dbmap.AddTableWithName(crudtest_struct{}, "crudtest_struct").SetKeys(true, "Id")
+	err = dbmap.CreateTablesIfNotExists()
+	checkErr(err, "Create table failed")
+	return dbmap
+}
+
+func checkErr(err error, msg string) {
+	if err != nil {log.Fatalln(msg, err)}
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/gettest", Get_gettest)
+	router.GET("/gettest/where/:whereclause", Get_whereclause_gettest)
+	router.GET("/gettest/id/:id", GetID_gettest)
+	router.POST("/gettest", Post_gettest)
+	router.PUT("/gettest/:id", Put_gettest)
+	router.DELETE("/gettest/:id", Delete_gettest)
+	router.GET("/crudtest", Get_crudtest)
+	router.GET("/crudtest/where/:whereclause", Get_whereclause_crudtest)
+	router.GET("/crudtest/id/:id", GetID_crudtest)
+	router.POST("/crudtest", Post_crudtest)
+	router.PUT("/crudtest/:id", Put_crudtest)
+	router.DELETE("/crudtest/:id", Delete_crudtest)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func Get_gettest(c *gin.Context) {
+	var gettest_get []gettest_struct
+	_, err := dbmap.Select(&gettest_get, "SELECT * FROM gettest_struct")
+	if err == nil {
+  		c.JSON(200, gettest_get)
+	} else {
+  		c.JSON(404, gin.H{"error": "not able to find in the table"})
+	}
+}
+
+func Get_whereclause_gettest(c *gin.Context) {
+	whereclause := c.Params.ByName("whereclause")
+	var gettest_get []gettest_struct
+	_, err := dbmap.Select(&gettest_get, "SELECT * FROM gettest_struct WHERE " + whereclause)
+	if err == nil {
+  		c.JSON(200, gettest_get)
+	} else {
+  		c.JSON(404, gin.H{"error": "not able to find in the table"})
+	}
+}
+
+func GetID_gettest(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var gettest_GetID gettest_struct
+	err := dbmap.SelectOne(&gettest_GetID, "SELECT * FROM gettest_struct WHERE id=?", id)
+	if err == nil {
+		gettest_GetID_id, _ := strconv.ParseInt(id, 0, 64)
+		content := &gettest_struct {
+			Id: gettest_GetID_id,
+			Greeting: gettest_GetID.Greeting,
+				Holiday: gettest_GetID.Holiday,
+	}
+		c.JSON(200, content)
+	} else {
+		c.JSON(404, gin.H{"error": "content not found"})
+	}
+}
+
+func Post_gettest(c *gin.Context) {
+	var gettest_post gettest_struct
+	c.Bind(&gettest_post )
+	if gettest_post.Greeting != "" && gettest_post.Holiday != "" {
+		if insert, _ := dbmap.Exec(`INSERT INTO gettest_struct(greeting, holiday) VALUES (?, ?)`,
+		gettest_post.Greeting, gettest_post.Holiday);insert != nil {
+			gettest_post_id, err := insert.LastInsertId()
+			if err == nil {
+				content := &gettest_struct {
+				Id: gettest_post_id,
+				Greeting: gettest_post.Greeting,
+				Holiday: gettest_post.Holiday,
+				}
+				c.JSON(201, content)
+			} else {
+				checkErr(err, "Insert failed")
+			}
+		}
+	} else {
+			c.JSON(422, gin.H{"error": "fields are empty"})
+	}
+}
+
+func Put_gettest(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var gettest_put gettest_struct
+	err := dbmap.SelectOne(&gettest_put, "SELECT * FROM gettest_struct WHERE id=?", id)
+	if err == nil {
+		var json gettest_struct
+		c.Bind(&json)
+		gettest_put_id, _ := strconv.ParseInt(id, 0, 64)
+		gettest_put :=gettest_struct{
+			Id: gettest_put_id,
+			Greeting: json.Greeting,
+			Holiday: json.Holiday,
+	}
+	if gettest_put.Greeting != "" && gettest_put.Holiday != "" {
+		_, err = dbmap.Update(&gettest_put )
+		if err == nil {
+		c.JSON(200, gettest_put)
+	} else {
+		checkErr(err, "Update failed")
+	}
+	} else {
+		c.JSON(422, gin.H{"error": "fields are empty"})
+	}
+	} else {
+		c.JSON(404, gin.H{"error": "content not found"})
+	}
+}
+
+func Delete_gettest(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var gettest_delete gettest_struct
+	err := dbmap.SelectOne(&gettest_delete,"SELECT id FROM gettest_struct WHERE id=?", id)
+	if err == nil {
+		_, err = dbmap.Delete(&gettest_delete)
+		if err == nil {
+			c.JSON(200, gin.H{"id #" + id: " deleted"})
+		} else {
+			checkErr(err, "Delete failed")
+		}
+	} else {
+		c.JSON(404, gin.H{"error": "content not found"})
+	}
+}
+
+func Get_crudtest(c *gin.Context) {
+	var crudtest_get []crudtest_struct
+	_, err := dbmap.Select(&crudtest_get, "SELECT * FROM crudtest_struct")
+	if err == nil {
+  		c.JSON(200, crudtest_get)
+	} else {
+  		c.JSON(404, gin.H{"error": "not able to find in the table"})
+	}
+}
+
+func Get_whereclause_crudtest(c *gin.Context) {
+	whereclause := c.Params.ByName("whereclause")
+	var crudtest_get []crudtest_struct
+	_, err := dbmap.Select(&crudtest_get, "SELECT * FROM crudtest_struct WHERE " + whereclause)
+	if err == nil {
+  		c.JSON(200, crudtest_get)
+	} else {
+  		c.JSON(404, gin.H{"error": "not able to find in the table"})
+	}
+}
+
+func GetID_crudtest(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var crudtest_GetID crudtest_struct
+	err := dbmap.SelectOne(&crudtest_GetID, "SELECT * FROM crudtest_struct WHERE id=?", id)
+	if err == nil {
+		crudtest_GetID_id, _ := strconv.ParseInt(id, 0, 64)
+		content := &crudtest_struct {
+			Id: crudtest_GetID_id,
+			Firstname: crudtest_GetID.Firstname,
+				Lastname: crudtest_GetID.Lastname,
+	}
+		c.JSON(200, content)
+	} else {
+		c.JSON(404, gin.H{"error": "content not found"})
+	}
+}
+
+func Post_crudtest(c *gin.Context) {
+	var crudtest_post crudtest_struct
+	c.Bind(&crudtest_post )
+	if crudtest_post.Firstname != "" && crudtest_post.Lastname != "" {
+		if insert, _ := dbmap.Exec(`INSERT INTO crudtest_struct(firstname, lastname) VALUES (?, ?)`,
+		crudtest_post.Firstname, crudtest_post.Lastname);insert != nil {
+			crudtest_post_id, err := insert.LastInsertId()
+			if err == nil {
+				content := &crudtest_struct {
+				Id: crudtest_post_id,
+				Firstname: crudtest_post.Firstname,
+				Lastname: crudtest_post.Lastname,
+				}
+				c.JSON(201, content)
+			} else {
+				checkErr(err, "Insert failed")
+			}
+		}
+	} else {
+			c.JSON(422, gin.H{"error": "fields are empty"})
+	}
+}
+
+func Put_crudtest(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var crudtest_put crudtest_struct
+	err := dbmap.SelectOne(&crudtest_put, "SELECT * FROM crudtest_struct WHERE id=?", id)
+	if err == nil {
+		var json crudtest_struct
+		c.Bind(&json)
+		crudtest_put_id, _ := strconv.ParseInt(id, 0, 64)
+		crudtest_put :=crudtest_struct{
+			Id: crudtest_put_id,
+			Firstname: json.Firstname,
+			Lastname: json.Lastname,
+	}
+	if crudtest_put.Firstname != "" && crudtest_put.Lastname != "" {
+		_, err = dbmap.Update(&crudtest_put )
+		if err == nil {
+		c.JSON(200, crudtest_put)
+	} else {
+		checkErr(err, "Update failed")
+	}
+	} else {
+		c.JSON(422, gin.H{"error": "fields are empty"})
+	}
+	} else {
+		c.JSON(404, gin.H{"error": "content not found"})
+	}
+}
+
+func Delete_crudtest(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var crudtest_delete crudtest_struct
+	err := dbmap.SelectOne(&crudtest_delete,"SELECT id FROM crudtest_struct WHERE id=?", id)
+	if err == nil {
+		_, err = dbmap.Delete(&crudtest_delete)
+		if err == nil {
+			c.JSON(200, gin.H{"id #" + id: " deleted"})
+		} else {
+			checkErr(err, "Delete failed")
+		}
+	} else {
+		c.JSON(404, gin.H{"error": "content not found"})
+	}
+}

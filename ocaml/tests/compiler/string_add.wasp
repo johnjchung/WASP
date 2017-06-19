@@ -1,0 +1,4 @@
+Endpoint stringAdd(GET:) {
+	string x = "neel" ^ "vad";
+	string z = "empty" ^ "" ^ "add";
+}

@@ -1,0 +1,6 @@
+Endpoint negativesTest(GET:) {
+	int a = -4;
+	int b = 5;
+	float c = -3.564;
+	float d = 3.56;
+}

@@ -1,0 +1,4 @@
+Endpoint divideint(GET:) {
+    string testing = "3 divide 4";
+    int answer = 3/4;
+}

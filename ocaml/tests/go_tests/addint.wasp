@@ -1,0 +1,4 @@
+Endpoint addint(GET:) {
+    string testing = "3 plus 4";
+    int answer = 3+4;
+}

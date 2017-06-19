@@ -1,0 +1,3 @@
+Endpoint fail_float_assigned_to_int(GET:) {
+	int y = 2.3;
+}

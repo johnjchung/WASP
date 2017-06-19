@@ -1,0 +1,13 @@
+Func list<int> reverseList(list<int> a) {
+    int i = sizeof a - 1;
+    list<int> reverseList = [0] @ 0->0;
+    while (i >= 0) {
+        reverseList = reverseList ++ a @ i->(i+1);
+        i = i - 1;
+    }
+    return reverseList;
+}
+
+Endpoint reverse(GET:) {
+    list<int> sublist = reverseList([1,2,3,4,5,6,7,8,9,10]);
+}

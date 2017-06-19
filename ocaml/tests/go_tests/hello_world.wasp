@@ -1,0 +1,3 @@
+Endpoint hello(GET:) {
+    string Greeting = "Hello World!!!";
+}

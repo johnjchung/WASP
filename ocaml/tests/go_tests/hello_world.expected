@@ -1,0 +1,51 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"math"
+	"os"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+type hello_struct struct {
+	Greeting string `db:"greeting" json:"greeting"`
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/hello", Get_hello)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func hello_struct_wrapper() hello_struct {
+	return hello_struct{Greeting: "Hello World!!!"}
+}
+
+func Get_hello(c *gin.Context) {
+	hello_struct := hello_struct_wrapper()
+	c.JSON(200, hello_struct)
+}

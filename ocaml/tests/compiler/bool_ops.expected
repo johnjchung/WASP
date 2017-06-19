@@ -1,0 +1,62 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"math"
+	"os"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+type boolOps_struct struct {
+	A bool `db:"a" json:"a"`
+	B bool `db:"b" json:"b"`
+	C bool `db:"c" json:"c"`
+	D bool `db:"d" json:"d"`
+	E bool `db:"e" json:"e"`
+	F bool `db:"f" json:"f"`
+	G bool `db:"g" json:"g"`
+	H bool `db:"h" json:"h"`
+	I bool `db:"i" json:"i"`
+	J bool `db:"j" json:"j"`
+	K bool `db:"k" json:"k"`
+	L bool `db:"l" json:"l"`
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/boolOps", Get_boolOps)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func boolOps_struct_wrapper() boolOps_struct {
+	return boolOps_struct{A: bool(true) && bool(true), B: bool(true) && bool(false), C: bool(false) && bool(true), D: bool(false) && bool(false), E: bool(true) || bool(true), F: bool(true) || bool(false), G: bool(false) || bool(true), H: bool(false) || bool(false), I: bool(true) != bool(true), J: bool(true) != bool(false), K: bool(false) != bool(true), L: bool(false) != bool(false)}
+}
+
+func Get_boolOps(c *gin.Context) {
+	boolOps_struct := boolOps_struct_wrapper()
+	c.JSON(200, boolOps_struct)
+}

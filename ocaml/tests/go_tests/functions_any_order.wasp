@@ -1,0 +1,11 @@
+Func int double(int a) {
+    return sum(a, a);
+}
+
+Func int sum(int a, int b) {
+    return a + b;
+}
+
+Endpoint doubleint(GET:int a) {
+    int solution = double(a);
+}

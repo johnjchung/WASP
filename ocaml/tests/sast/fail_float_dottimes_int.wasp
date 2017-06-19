@@ -1,0 +1,3 @@
+Endpoint int_dottimes_float(GET:) {
+	int x = 3.3 .* 4;
+}

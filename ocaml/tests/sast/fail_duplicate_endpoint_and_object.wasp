@@ -1,0 +1,7 @@
+Endpoint eo(GET:) {
+	float x = 3.3;
+}
+
+Object eo() {
+	string y;
+}

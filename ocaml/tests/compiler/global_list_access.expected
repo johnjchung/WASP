@@ -1,0 +1,53 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"math"
+	"os"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+var some_strings = []string {"string1", "string2", "string3", "string4"}
+
+type listChecking_struct struct {
+	B string `db:"b" json:"b"`
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/listChecking", Get_listChecking)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func listChecking_struct_wrapper() listChecking_struct {
+	return listChecking_struct{B: some_strings[2]}
+}
+
+func Get_listChecking(c *gin.Context) {
+	listChecking_struct := listChecking_struct_wrapper()
+	c.JSON(200, listChecking_struct)
+}

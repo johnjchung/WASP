@@ -1,0 +1,9 @@
+Func list<int> listAccess(list<int> a) {
+    return a @ 1->3;
+}
+
+Endpoint rangeTest(GET:) {
+    string justOneChar = "howdydoody" @ 2->3;
+    string substring = "testtesttest" @ 0->4;
+    list<int> sublist = listAccess([1,4,7,10]);
+}

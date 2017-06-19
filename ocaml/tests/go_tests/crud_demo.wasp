@@ -1,0 +1,12 @@
+Endpoint crudone(CRUD:) {
+    string firstname;
+    string lastname;
+}
+Endpoint justgetit(GET:) {
+    string holiday = "Christmas";
+    string greeting = "Merry Christmas";
+}
+Endpoint crudtwo(CRUD:) {
+    string greeting;
+    string holiday;
+}

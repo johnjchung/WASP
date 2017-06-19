@@ -1,0 +1,11 @@
+int a = 4;
+bool d = false;
+string s = "eww";
+float c = 4.552;
+
+Endpoint edwards(GET:) {
+    int b = a;
+    bool e = d;
+    string t = s;
+    float f = c;
+}

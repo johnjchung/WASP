@@ -1,0 +1,14 @@
+Func int whileloop () {
+	bool breaklabel = false;
+	int a = 0;
+
+	while(breaklabel) {
+		if (a == 5) {
+			breaklabel = true;
+		} else {
+			a = a + 1;
+		}
+	}
+
+	return a;
+}

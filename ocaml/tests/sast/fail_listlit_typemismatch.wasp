@@ -1,0 +1,3 @@
+Endpoint temp(GET:) {
+    list<int> a = ["hello", 1];
+}

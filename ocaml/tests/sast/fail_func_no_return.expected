@@ -1,0 +1,1 @@
+Fatal error: exception Type_checking.NoReturnErr("No return statement found for function squareFloat()")

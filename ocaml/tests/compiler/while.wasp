@@ -1,0 +1,15 @@
+Func int whileLoop (int a) {
+	bool breaklabel = false;
+	while(breaklabel) {
+		if (a == 5) {
+			breaklabel = true;
+		} else {
+			a = a + 1;
+		}
+	}
+
+	return a;
+}
+Endpoint whileloop(GET:int a) {
+	int whilelooptest = whileLoop(a);
+}

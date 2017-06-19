@@ -1,0 +1,9 @@
+Object Person() {
+	int age;
+	int id; 
+}
+
+Endpoint badCitizen(GET:) {
+    Person p1 = Person { 10};
+}
+

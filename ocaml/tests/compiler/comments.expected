@@ -1,0 +1,52 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"math"
+	"os"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+type comments_struct struct {
+	X int `db:"x" json:"x"`
+	Y float64 `db:"y" json:"y"`
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/comments", Get_comments)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func comments_struct_wrapper() comments_struct {
+	return comments_struct{X: 4, Y: 3.5}
+}
+
+func Get_comments(c *gin.Context) {
+	comments_struct := comments_struct_wrapper()
+	c.JSON(200, comments_struct)
+}

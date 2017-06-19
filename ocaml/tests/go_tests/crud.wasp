@@ -1,0 +1,4 @@
+Endpoint crudtest(CRUD:) {
+    string firstname;
+    string lastname;
+}

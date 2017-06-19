@@ -1,0 +1,8 @@
+Func int squareFloat (int i) {
+	list<int> a = [1,2,3,4,5];
+	i = a@3;
+	return i;
+}
+Endpoint squarefloat(GET:int i) {
+	int square = squareFloat(i);
+}

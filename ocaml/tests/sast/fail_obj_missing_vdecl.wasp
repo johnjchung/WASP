@@ -1,0 +1,7 @@
+
+int a = 11;
+int b = 13;
+int c = 12;
+
+Endpoint testing(GET:){
+}

@@ -1,0 +1,67 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"math"
+	"os"
+	"strings"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+type funky_struct struct {
+	FunkyCapsString string `db:"funkyCapsString" json:"funkyCapsString"`
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/funky/:s", Get_funky)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func funkyCaps(a string) string {
+	i := 0
+	funkyString := ""
+	for i < len(a) {
+	if i % 2 == 0 {
+	funkyString = (funkyString + strings.ToUpper(a[i:int_conv(i) + int_conv(1)]))
+	} else {
+	funkyString = (funkyString + strings.ToLower(a[i:int_conv(i) + int_conv(1)]))
+	}
+	i = int_conv(i) + int_conv(1)
+	}
+	return funkyString
+}
+
+func funky_struct_wrapper(s string) funky_struct {
+	return funky_struct{FunkyCapsString: funkyCaps(s)}
+}
+
+func Get_funky(c *gin.Context) {
+	s := c.Param("s")
+	funky_struct := funky_struct_wrapper(s)
+	c.JSON(200, funky_struct)
+}

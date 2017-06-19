@@ -1,0 +1,4 @@
+Func int squareFloat (int x, int y) {
+	int i = 11;
+	return 345.5;
+}

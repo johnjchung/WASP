@@ -1,0 +1,4 @@
+Endpoint multint(GET:) {
+    string testing = "3 times 4";
+    int answer = 3*4;
+}

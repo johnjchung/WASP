@@ -1,0 +1,12 @@
+Func int access() {
+    int a = 5;
+    if (true) {
+        int i = 0;
+        a = i;
+    }
+    return a;
+}
+
+Endpoint temp(GET:) {
+    int a = access();
+}

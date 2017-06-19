@@ -1,0 +1,47 @@
+Endpoint testBinops(GET:) {
+	int a = 7 mod 4;
+	int b = 5 mod 5;
+
+	bool c = 2.3 < 1;
+	bool d = 2.3 > 1;
+	bool e = 1 < 2.3;
+	bool f = 1 > 2.3;
+
+	bool g = 1 < 2;
+	bool h = 2 > 3;
+	bool i = 2 < 1;
+	bool j = 3 > 2;
+
+	bool k = 3 == 3;
+	bool l = 3 == 3.2;
+	bool m = 3.2 == 3.2;
+	bool n = 3.2 == 3;
+
+	bool o = 2.3 > 3.4;
+	bool p = 3.4 > 2.3;
+	bool q = 2.3 < 3.4;
+	bool r = 3.4 < 2.3;
+
+	bool s = 3.2 <= 3.4;
+	bool t = 3 <= 3.4;
+	bool u = 3.3 <= 3;
+	bool v = 3 <= 4;
+	bool w = 4 <= 2;
+
+	bool x = 3.2 >= 3.4;
+	bool y = 3 >= 3.4;
+	bool z = 3.3 >= 3;
+	bool aa = 3 >= 4;
+	bool bb = 4 >= 2;
+
+	bool cc = "sdf" ~= "s";
+	bool dd = "s" ~= "sdf";
+
+	bool ee = 1 != 1;
+	bool ff = 1.1 != 1.1;
+	bool gg = 1 != 2;
+	bool hh = 1 != 2.2;
+	bool jj = 2.4 != 1.1;
+	bool ii = 2.3 != 2;
+	bool kk = 2.2 != 2.3;
+}

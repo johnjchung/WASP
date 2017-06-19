@@ -1,0 +1,13 @@
+Object test() {
+    bool g;
+    bool h;
+}
+
+Endpoint vartypes(GET:) {
+    string a = "bob";
+    int b = 34;
+    float c = 12.;
+    float d = .4;
+    float e = 1.23;
+    test f = test{true, false};
+}

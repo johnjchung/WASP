@@ -1,0 +1,67 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"math"
+	"os"
+	"strconv"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+type gcdtest_struct struct {
+	C int `db:"c" json:"c"`
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/gcdtest/:a/:b", Get_gcdtest)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func gcd(a int, b int) int {
+	for a != b {
+	if bool(a > b) {
+	a = int_conv(a) - int_conv(b)
+	} else {
+	b = int_conv(b) - int_conv(a)
+	}
+	}
+	return a
+}
+
+func gcdtest_struct_wrapper(a int, b int) gcdtest_struct {
+	return gcdtest_struct{C: gcd(a, b)}
+}
+
+func Get_gcdtest(c *gin.Context) {
+	a, err := strconv.Atoi(c.Param("a"))
+	if	err != nil { c.String(400, "Error: A must be an integer."); return }
+	b, err := strconv.Atoi(c.Param("b"))
+	if	err != nil { c.String(400, "Error: B must be an integer."); return }
+	gcdtest_struct := gcdtest_struct_wrapper(a, b)
+	c.JSON(200, gcdtest_struct)
+}

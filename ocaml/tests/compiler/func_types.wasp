@@ -1,0 +1,22 @@
+Func float float_func() {
+    return 1.0;
+}
+
+Func int int_func() {
+    return 1;
+}
+
+Func string string_func() {
+    return "hey";
+}
+
+Func bool bool_func() {
+    return true;
+}
+
+Endpoint ftoc(GET:) {
+    float a = float_func();
+    int b = int_func();
+    string c = string_func();
+    bool d = bool_func();
+}

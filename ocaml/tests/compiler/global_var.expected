@@ -1,0 +1,59 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"math"
+	"os"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+var a = 4
+var d = false
+var s = "eww"
+var c = 4.552
+
+type edwards_struct struct {
+	B int `db:"b" json:"b"`
+	E bool `db:"e" json:"e"`
+	T string `db:"t" json:"t"`
+	F float64 `db:"f" json:"f"`
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/edwards", Get_edwards)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func edwards_struct_wrapper() edwards_struct {
+	return edwards_struct{B: a, E: d, T: s, F: c}
+}
+
+func Get_edwards(c *gin.Context) {
+	edwards_struct := edwards_struct_wrapper()
+	c.JSON(200, edwards_struct)
+}

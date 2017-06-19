@@ -1,0 +1,9 @@
+Func int ifelse (int x) {
+  int i = 1;
+  if(x == 3) {i = 12;}
+  	else {i = 13;}
+  return i;
+ }
+Endpoint ifelsetest(GET:) {
+ int a = ifelse(3);
+}

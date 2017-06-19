@@ -1,0 +1,4 @@
+Endpoint boolOps(GET:) {
+	bool a = not true;
+	bool b = not false;
+}

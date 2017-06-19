@@ -1,0 +1,3 @@
+Endpoint intDivideFloat(GET:) {
+    int Test = 5 / 2.7;
+}

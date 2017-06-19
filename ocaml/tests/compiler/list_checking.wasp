@@ -1,0 +1,6 @@
+Endpoint listChecking(GET:) {
+	list<int> an_int_list = [1,2,3];
+	list<float> a_float_list = [2.3, 3.4, 2.5];
+	list<string> a_string_list = ["neel", "makes", "lists"];
+	list<bool> a_bool_list = [true, false, true, false];
+}

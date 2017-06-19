@@ -1,0 +1,8 @@
+Endpoint gettest(CRUD:) {
+    string greeting;
+    string holiday;
+}
+Endpoint crudtest(CRUD:) {
+    string firstname;
+    string lastname;
+}

@@ -1,0 +1,88 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"math"
+	"os"
+	"strings"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+type testBinops_struct struct {
+	A int `db:"a" json:"a"`
+	B int `db:"b" json:"b"`
+	C bool `db:"c" json:"c"`
+	D bool `db:"d" json:"d"`
+	E bool `db:"e" json:"e"`
+	F bool `db:"f" json:"f"`
+	G bool `db:"g" json:"g"`
+	H bool `db:"h" json:"h"`
+	I bool `db:"i" json:"i"`
+	J bool `db:"j" json:"j"`
+	K bool `db:"k" json:"k"`
+	L bool `db:"l" json:"l"`
+	M bool `db:"m" json:"m"`
+	N bool `db:"n" json:"n"`
+	O bool `db:"o" json:"o"`
+	P bool `db:"p" json:"p"`
+	Q bool `db:"q" json:"q"`
+	R bool `db:"r" json:"r"`
+	S bool `db:"s" json:"s"`
+	T bool `db:"t" json:"t"`
+	U bool `db:"u" json:"u"`
+	V bool `db:"v" json:"v"`
+	W bool `db:"w" json:"w"`
+	X bool `db:"x" json:"x"`
+	Y bool `db:"y" json:"y"`
+	Z bool `db:"z" json:"z"`
+	Aa bool `db:"aa" json:"aa"`
+	Bb bool `db:"bb" json:"bb"`
+	Cc bool `db:"cc" json:"cc"`
+	Dd bool `db:"dd" json:"dd"`
+	Ee bool `db:"ee" json:"ee"`
+	Ff bool `db:"ff" json:"ff"`
+	Gg bool `db:"gg" json:"gg"`
+	Hh bool `db:"hh" json:"hh"`
+	Jj bool `db:"jj" json:"jj"`
+	Ii bool `db:"ii" json:"ii"`
+	Kk bool `db:"kk" json:"kk"`
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/testBinops", Get_testBinops)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func testBinops_struct_wrapper() testBinops_struct {
+	return testBinops_struct{A: 7 % 4, B: 5 % 5, C: 2.3 < 1, D: bool(2.3 > 1), E: 1 < 2.3, F: bool(1 > 2.3), G: 1 < 2, H: bool(2 > 3), I: 2 < 1, J: bool(3 > 2), K: 3 == 3, L: 3 == 3.2, M: 3.2 == 3.2, N: 3.2 == 3, O: bool(2.3 > 3.4), P: bool(3.4 > 2.3), Q: 2.3 < 3.4, R: 3.4 < 2.3, S: 3.2 <= 3.4, T: 3 <= 3.4, U: 3.3 <= 3, V: 3 <= 4, W: 4 <= 2, X: 3.2 >= 3.4, Y: 3 >= 3.4, Z: 3.3 >= 3, Aa: 3 >= 4, Bb: 4 >= 2, Cc: strings.Contains("sdf", "s"), Dd: strings.Contains("s", "sdf"), Ee: 1 != 1, Ff: 1.1 != 1.1, Gg: 1 != 2, Hh: 1 != 2.2, Jj: 2.4 != 1.1, Ii: 2.3 != 2, Kk: 2.2 != 2.3}
+}
+
+func Get_testBinops(c *gin.Context) {
+	testBinops_struct := testBinops_struct_wrapper()
+	c.JSON(200, testBinops_struct)
+}

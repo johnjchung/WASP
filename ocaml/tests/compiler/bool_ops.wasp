@@ -1,0 +1,16 @@
+Endpoint boolOps(GET:) {
+	bool a = true and true;
+	bool b = true and false;
+	bool c = false and true;
+	bool d = false and false;
+
+	bool e = true or true;
+	bool f = true or false;
+	bool g = false or true;
+	bool h = false or false;
+
+	bool i = true xor true;
+	bool j = true xor false;
+	bool k = false xor true;
+	bool l = false xor false;
+}

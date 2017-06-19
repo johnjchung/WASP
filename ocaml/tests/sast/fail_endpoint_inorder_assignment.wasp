@@ -1,0 +1,5 @@
+Endpoint assignment(GET:) {
+	int y = 2 * 2;
+	int x = 3;
+	int b = x * 2;
+}

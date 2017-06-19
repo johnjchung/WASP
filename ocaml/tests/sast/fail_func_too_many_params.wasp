@@ -1,0 +1,7 @@
+Func int twoArgs(int a, int b) {
+    return a + b;
+}
+
+Endpoint badCitizen(GET:) {
+    int sum = twoArgs(2, 3, 4);
+}

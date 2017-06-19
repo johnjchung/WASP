@@ -1,0 +1,10 @@
+int a = 11;
+int b = 13;
+
+Func int squareFloat2(int k) {
+	int j = a + b + k;
+	return a + b;
+}
+Endpoint e(GET:int x) {
+    int c = squareFloat2(x);
+}

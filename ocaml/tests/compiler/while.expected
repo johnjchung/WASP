@@ -1,0 +1,66 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"math"
+	"os"
+	"strconv"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+type whileloop_struct struct {
+	Whilelooptest int `db:"whilelooptest" json:"whilelooptest"`
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/whileloop/:a", Get_whileloop)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func whileLoop(a int) int {
+	breaklabel := false
+	for breaklabel {
+	if a == 5 {
+	breaklabel = true
+	} else {
+	a = int_conv(a) + int_conv(1)
+	}
+	}
+	return a
+}
+
+func whileloop_struct_wrapper(a int) whileloop_struct {
+	return whileloop_struct{Whilelooptest: whileLoop(a)}
+}
+
+func Get_whileloop(c *gin.Context) {
+	a, err := strconv.Atoi(c.Param("a"))
+	if	err != nil { c.String(400, "Error: A must be an integer."); return }
+	whileloop_struct := whileloop_struct_wrapper(a)
+	c.JSON(200, whileloop_struct)
+}

@@ -1,0 +1,54 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"math"
+	"os"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+type negativesTest_struct struct {
+	A int `db:"a" json:"a"`
+	B int `db:"b" json:"b"`
+	C float64 `db:"c" json:"c"`
+	D float64 `db:"d" json:"d"`
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/negativesTest", Get_negativesTest)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func negativesTest_struct_wrapper() negativesTest_struct {
+	return negativesTest_struct{A: (-4), B: 5, C: (-3.564), D: 3.56}
+}
+
+func Get_negativesTest(c *gin.Context) {
+	negativesTest_struct := negativesTest_struct_wrapper()
+	c.JSON(200, negativesTest_struct)
+}

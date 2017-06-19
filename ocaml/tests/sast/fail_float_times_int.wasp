@@ -1,0 +1,3 @@
+Endpoint int_times_float(GET:) {
+	float x = 3.3 * 4;
+}

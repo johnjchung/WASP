@@ -1,0 +1,10 @@
+Endpoint temp( GET:) {int a = [int] access();}Func int access( ) {
+	int a = [int] 5;
+if ([bool] true)
+ {	int i = [int] 0;
+	a = [int] i;
+}
+
+	Return [int] a;
+
+}

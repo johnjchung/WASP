@@ -1,0 +1,52 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"math"
+	"os"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+type multint_struct struct {
+	Testing string `db:"testing" json:"testing"`
+	Answer int `db:"answer" json:"answer"`
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/multint", Get_multint)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func multint_struct_wrapper() multint_struct {
+	return multint_struct{Testing: "3 times 4", Answer: int_conv(3) * int_conv(4)}
+}
+
+func Get_multint(c *gin.Context) {
+	multint_struct := multint_struct_wrapper()
+	c.JSON(200, multint_struct)
+}

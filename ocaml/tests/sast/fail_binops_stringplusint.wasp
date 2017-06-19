@@ -1,0 +1,3 @@
+Endpoint stringPlusInt(GET:) {
+    string Test = "Hello World!!!" + 5;
+}

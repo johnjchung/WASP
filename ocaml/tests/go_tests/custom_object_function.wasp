@@ -1,0 +1,12 @@
+Object person() {
+    string first_name;
+    string last_name;
+}
+
+Func person makeAPerson(string f, string l) {
+    return person{f, l};
+}
+
+Endpoint makeADude(GET:string first_name, string last_name) {
+    person dude = makeAPerson(first_name, last_name);
+}

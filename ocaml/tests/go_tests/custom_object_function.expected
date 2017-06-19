@@ -1,0 +1,66 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"math"
+	"os"
+)
+
+func int_conv(anything interface{}) int {
+	switch v := anything.(type) {
+		case int:
+			return v
+		case float64, float32:
+			var float_var = v.(float64)
+			return int(math.Trunc(float_var))
+		default:
+			return 0
+	}
+	return 0
+}
+
+func float_conv(anything interface{}) float64 {
+ 	 switch v := anything.(type) {
+		case int:
+            return float64(v)
+		case float64:
+			return v
+		default:
+			return 0
+	}
+	return 0.0
+}
+
+type person_struct struct {
+	First_name string `db:"first_name" json:"first_name"`
+	Last_name string `db:"last_name" json:"last_name"`
+}
+
+type makeADude_struct struct {
+	Dude person_struct `db:"dude" json:"dude"`
+}
+
+func main() {
+	router := gin.Default()
+	router.GET("/makeADude/:first_name/:last_name", Get_makeADude)
+	router.Run(":"+os.Getenv("PORT"))
+}
+
+func makeAPerson(f string, l string) person_struct {
+	return person_struct_wrapper(f, l)
+}
+
+func person_struct_wrapper(first_name string, last_name string) person_struct {
+	return person_struct{First_name: first_name, Last_name: last_name}
+}
+
+func makeADude_struct_wrapper(first_name string, last_name string) makeADude_struct {
+	return makeADude_struct{Dude: makeAPerson(first_name, last_name)}
+}
+
+func Get_makeADude(c *gin.Context) {
+	first_name := c.Param("first_name")
+	last_name := c.Param("last_name")
+	makeADude_struct := makeADude_struct_wrapper(first_name, last_name)
+	c.JSON(200, makeADude_struct)
+}
